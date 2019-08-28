@@ -21,17 +21,19 @@
             text-align: center;
             background: red;
         }
-
     </style>
 </head>
 
 <body>
     <div class="firkant"></div>
     <div class="cirkel"></div>
-    <script>
-        document.querySelector(".firkant").textContent = "Grøn firkant";
-        document.querySelector(".cirkel").textContent = "Rød firkant";
 
+    <script>
+        let firkantURL = `http://mabe-kea.dk/E19/pics/frog.png`;
+        let cirkelURL = `http://mabe-kea.dk/E19/pics/pig.png`;
+
+        document.querySelector(".firkant").innerHTML = `<img src = ${firkantURL} alt="Grøn frø">`
+        document.querySelector(".cirkel").innerHTML = `<img src = ${cirkelURL} alt= "Lyserød gris">`
     </script>
 </body>
 

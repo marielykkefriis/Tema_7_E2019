@@ -28,9 +28,18 @@
 <body>
     <div class="firkant"></div>
     <div class="cirkel"></div>
+
     <script>
-        document.querySelector(".firkant").textContent = "Grøn firkant";
-        document.querySelector(".cirkel").textContent = "Rød firkant";
+        let firkantURL = `http://mabe-kea.dk/E19/pics/frog.png`;
+        let cirkelURL = `http://mabe-kea.dk/E19/pics/pig.png`;
+
+        document.addEventListener("DOMContentLoaded", start)
+
+        function start() {
+            console.log("start");
+            document.querySelector(".firkant").innerHTML = `<img src = ${firkantURL} alt="Grøn frø">`
+            document.querySelector(".cirkel").innerHTML = `<img src = ${cirkelURL} alt= "Lyserød gris">`
+        }
 
     </script>
 </body>
