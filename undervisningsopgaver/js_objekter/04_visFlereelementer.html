@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+
+<body>
+    <template>
+        <article>
+            <h1>Dyr</h1>
+            <p>Type</p>
+            <p>Levested</p>
+            <img src="http://mabe-kea.dk/E19/pics/pig.png">
+
+        </article>
+    </template>
+    <section id="dyr-liste"></section>
+
+</body>
+<script>
+    const skabelon = document.querySelector("template").content;
+    const listeElm = document.querySelector("#dyr-liste");
+    console.log(skabelon);
+    const array = [{
+
+        navn: "Gris",
+        type: "Pattedyr",
+        levested: "Svinefarme",
+        billede: "http://mabe-kea.dk/E19/pics/pig.png"
+    }, {
+        navn: "Ko",
+        type: "Pattedyr",
+        levested: "Bondegaarde",
+        billede: "http://mabe-kea.dk/E19/pics/pig.png"
+    }]
+
+    array.forEach(element => {
+        const klon = skabelon.cloneNode(true);
+        console.log(klon);
+        const h1 = klon.querySelector("h1");
+        h1.textContent = element.navn;
+        const p = klon.querySelector("p");
+        p.textContent = element.type;
+        p.textContent += " levested " + element.levested;
+        const img = klon.querySelector("img");
+        img.src = element.thumb;
+        img.alt = "Billede af dyr";
+        listeElm.appendChild(klon);
+    })
+</script>
+
+</html>
