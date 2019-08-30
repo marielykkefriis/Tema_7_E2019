@@ -11,12 +11,11 @@
 
 <body>
     <template>
-        <article>
-            <h1>Dyr</h1>
-            <p>Type</p>
-            <p>Levested</p>
-            <img src="http://mabe-kea.dk/E19/pics/pig.png">
-
+        <article class="dyr">
+            <h1></h1>
+            <img src="" alt="">
+            <p></p>
+            <p></p>
         </article>
     </template>
     <section id="dyr-liste"></section>
@@ -24,7 +23,7 @@
 </body>
 <script>
     let dyrArray = [];
-    //    const dyrArray = [{
+    /* //    const dyrArray = [{
     //
     //        "navn": "Gris",
     //        "type": "Pattedyr",
@@ -68,7 +67,7 @@
     // img.alt = "Billede af dyr";
     // listeElm.appendChild(klon);
     // })
-
+*/
     document.addEventListener("DOMContentLoaded", start);
 
     function start() {
@@ -93,20 +92,26 @@
 
         dyrArray.forEach(element => {
             const klon = skabelon.cloneNode(true);
-
             console.log(klon);
             const h1 = klon.querySelector("h1");
             h1.textContent = element.navn;
+
             const p = klon.querySelector("p");
+            const pp = klon.querySelector("p + p");
             p.textContent = element.type;
-            p.textContent += "levested" + element.levested;
+            pp.textContent = element.levested;
+
             const img = klon.querySelector("img");
-            img.src = element.thumb;
+            img.src = element.billede;
             img.alt = "Billede af dyr";
 
             listeElm.appendChild(klon);
         });
     };
+
+
+    // klon.querySelector(".type").textContent = `Type: ${dyr.type}`;
+    // klon.querySelector(".levested").textContent = `Levested: ${dyr.levested}`;
 </script>
 
 </html>
