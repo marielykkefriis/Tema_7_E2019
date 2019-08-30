@@ -4,6 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <title></title>
+    <style>
+
+    </style>
 </head>
 
 <body>
@@ -20,35 +23,90 @@
 
 </body>
 <script>
-    const skabelon = document.querySelector("template").content;
-    const listeElm = document.querySelector("#dyr-liste");
-    console.log(skabelon);
-    const array = [{
+    let dyrArray = [];
+    //    const dyrArray = [{
+    //
+    //        "navn": "Gris",
+    //        "type": "Pattedyr",
+    //        "levested": "Svinefarme",
+    //        "billede": "http://mabe-kea.dk/E19/pics/pig.png"
+    //    }, {
+    //        "navn": "Frø",
+    //        "type": "Pattedyr",
+    //        "levested": "Bondegaarde",
+    //        "billede": "http://mabe-kea.dk/E19/pics/pig.png"
+    //    }, {
+    //
+    //        "navn": "Ræv",
+    //        "type": "Pattedyr",
+    //        "levested": "Bondegaarde",
+    //        "billede": "http://mabe-kea.dk/E19/pics/pig.png"
+    //    }, {
+    //
+    //        "navn": "Sild",
+    //        "type": "Pattedyr",
+    //        "levested": "Bondegaarde",
+    //        "billede": "http://mabe-kea.dk/E19/pics/pig.png"
+    //    }, {
+    //
+    //        "navn": "Krokodille",
+    //        "type": "Pattedyr",
+    //        "levested": "Bondegaarde",
+    //        "billede": "http://mabe-kea.dk/E19/pics/pig.png"
+    //    }]
 
-        navn: "Gris",
-        type: "Pattedyr",
-        levested: "Svinefarme",
-        billede: "http://mabe-kea.dk/E19/pics/pig.png"
-    }, {
-        navn: "Ko",
-        type: "Pattedyr",
-        levested: "Bondegaarde",
-        billede: "http://mabe-kea.dk/E19/pics/pig.png"
-    }]
+    //    array.forEach(dyrArray => {
+    // const klon = skabelon.cloneNode(true);
+    // console.log(klon);
+    // const h1 = klon.querySelector("h1");
+    // h1.textContent = element.navn;
+    // const p = klon.querySelector("p");
+    // p.textContent = element.type;
+    // // p.textContent += element.levested;
+    // const img = klon.querySelector("img");
+    // img.src = element.thumb;
+    // img.alt = "Billede af dyr";
+    // listeElm.appendChild(klon);
+    // })
 
-    array.forEach(element => {
-        const klon = skabelon.cloneNode(true);
-        console.log(klon);
-        const h1 = klon.querySelector("h1");
-        h1.textContent = element.navn;
-        const p = klon.querySelector("p");
-        p.textContent = element.type;
-        //        p.textContent += element.levested;
-        const img = klon.querySelector("img");
-        img.src = element.thumb;
-        img.alt = "Billede af dyr";
-        listeElm.appendChild(klon);
-    })
+    document.addEventListener("DOMContentLoaded", start);
+
+    function start() {
+        hentJson();
+    }
+
+    async function hentJson() {
+        const response = await fetch("03_json.json");
+        console.log(response);
+        dyrArray = await response.json();
+        console.log(dyrArray);
+
+        visJson();
+    }
+
+    function visJson() {
+
+        const skabelon = document.querySelector("template").content;
+        const listeElm = document.querySelector("#dyr-liste");
+
+        console.log(skabelon);
+
+        dyrArray.forEach(element => {
+            const klon = skabelon.cloneNode(true);
+
+            console.log(klon);
+            const h1 = klon.querySelector("h1");
+            h1.textContent = element.navn;
+            const p = klon.querySelector("p");
+            p.textContent = element.type;
+            p.textContent += "levested" + element.levested;
+            const img = klon.querySelector("img");
+            img.src = element.thumb;
+            img.alt = "Billede af dyr";
+
+            listeElm.appendChild(klon);
+        });
+    };
 </script>
 
 </html>
