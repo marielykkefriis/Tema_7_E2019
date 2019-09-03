@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        img {
+            width: 100%;
+        }
+
+        .person {
+            padding: 20px;
+            border: solid;
+
+        }
+
+        section {
+            width: 100vw;
+            margin: 1vw auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            grid-gap: 2vw;
+            background-color: papayawhip;
+        }
+
+        @media screen and (min-width: 600px) {
+            section {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media screen and (min-width: 1200px) {
+            section {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+    <h1>Personliste</h1>
+    <template>
+        <article class="person">
+            <h2></h2>
+            <img src="" alt="">
+            <a href=""></a>
+        </article>
+    </template>
+    <section id="personliste"></section>
+</body>
+<script>
+    let personArray = [];
+
+    document.addEventListener("DOMContentLoaded", start);
+
+    function start() {
+        hentData();
+    }
+
+    async function hentData() {
+        const jsonurl = "https://spreadsheets.google.com/feeds/list/1Xge7slZ9dEOTCn1Yxl3OE4xgvrXOL8Y_iu3WN1yGB1U/od6/public/values?alt=json"
+        let jsonData = await fetch(jsonurl);
+        console.log(jsonData);
+        personArray = await jsonData.json();
+        console.log(personArray);
+        visData();
+    }
+
+    function visData() {
+        const skabelon = document.querySelector("template").content;
+        const listeElm = document.querySelector("#person-liste");
+
+        console.log(skabelon);
+
+        personArray.feed.entry.forEach(element => {
+            const klon = skabelon.cloneNode(true);
+            console.log(klon);
+
+            const h2 = klon.querySelector("h2");
+            h2.textContent = element.gsx$navn.$t;
+
+            const img = klon.querySelector("img");
+            img.src = element.gsx$billede.$t;
+            img.alt = " Billede af person " + element.navn;
+
+            const link = klon.querySelector("a")
+            link.setAttribute("href", "https://github.com" + element.gsx$github.$t);
+            link.textContent = "Link til gitHub"
+
+            personliste.appendChild(klon);
+        })
+    };
+
+</script>
+
+</html>
