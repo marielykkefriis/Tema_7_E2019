@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        .ret {
+        .person {
             border: 1px solid silver;
             padding: 20px;
             cursor: pointer;
@@ -64,39 +64,38 @@
 
 
 <nav>
-    <button data-ret="alt" class="valgt">Menu</button>
-    <button data-ret="forretter">Forretter</button>
-    <button data-ret="hovedretter">Hovedretter</button>
-    <button data-ret="desserter">Desserter</button>
-    <button data-ret="drikkevarer">Drikkevarer</button>
-    <button data-ret="sideorders">Side-orders</button>
+    <button data-køn="alle" class="valgt">Alle</button>
+    <button data-køn="m">Mænd</button>
+    <button data-køn="k">Kvinder</button>
+    <button data-køn="andet">Andet</button>
 
 </nav>
 
 
 <body>
-    <section id="menu"></section>
+    <section id="liste"></section>
 
-    <!--
     <section id="detalje">
-        <article class="ret">
+        <article class="person">
             <button class="luk">×
             </button>
             <h2></h2>
             <img src="" alt="">
-            <p class="lang"></p>
+            <p>Github: <a class="githubLink" href=""></a>
+            </p>
         </article>
     </section>
--->
 
 
     <template>
-        <article class="ret">
+        <article class="person">
             <h2 class="navn"> </h2>
             <img class="billede" alt="">
-            <p class="lang">Beskrivelse: </p>
-            <p class="pris">Pris: </p>
-            <p class="oprindelse">Oprindelse: </p>
+            <a href="github">github: </a>
+            <p class="alder">Alder: </p>
+            <p class="køn">Køn: </p>
+            <p class="hold">hold: </p>
+            <p class="historie">Historie: </p>
         </article>
     </template>
 
@@ -113,8 +112,8 @@
             filterKnapper.forEach(knap => knap.addEventListener("click", filtrer))
             hentJson();
 
-            //            skjulDetalje();
-            //          loadData();
+            skjulDetalje();
+            loadData();
 
         }
 
@@ -130,12 +129,14 @@
             this.classList.add("valgt"); //marker den nyvalgte knap
 
             vis(); //kald funktionen vis igen med nyt filter
+
         }
+
 
         // funktion der henter data fra Google sheet (via URL)
         async function hentJson() {
             const jsonUrl =
-                "https://spreadsheets.google.com/feeds/list/17Dd7DvkPaFamNUdUKlrFgnH6POvBJXac7qyiS6zNRw0/od6/public/values?alt=json&fbclid=IwAR21EGbf3OgAgUlKlZ8RRy8Lg5tvr5pcrWEyu5gxcxE0MfKSUmKWvIdrrzg";
+                "https://docs.google.com/spreadsheets/d/17Dd7DvkPaFamNUdUKlrFgnH6POvBJXac7qyiS6zNRw0/edit#gid=0";
             const jsonData = await fetch(jsonUrl);
             console.log(jsonData);
 
@@ -152,26 +153,24 @@
 
             const dest = document.querySelector("#menu"); //container til articler med en person
             const temp = document.querySelector("template").content; //select indhold af html skabelon (article)
-
             dest.textContent = ""; //ryd destination før man kloner nye
 
 
             menu.feed.entry.forEach(ret => { //loop igennem json (personer)
-                if (ret.gsx$kategori.$t == filter || filter == "alt") { //tjek hvilket køn personer har og sammenlign med filter eller vis alle
+                if (menu.gsx$ret.$t == filter || filter == "alt") { //tjek hvilket køn personer har og sammenlign med filter eller vis alle
 
                     const klon = temp.cloneNode(true);
                     // console.log(klon);
 
-                    klon.querySelector("h2").textContent = ret.gsx$navn.$t;
-                    klon.querySelector("img").src = ret.gsx$billede.$t;
-                    //                    klon.querySelector("kategori").textContent += ret.gsx$kategori.$t;
-                    klon.querySelector(".pris").textContent += ret.gsx$pris.$t;
-//                    klon.querySelector(".kort").textContent += ret.gsx$kort.$t;
-                    klon.querySelector(".lang").textContent += ret.gsx$lang.$t;
-                    klon.querySelector(".oprindelse").textContent += ret.gsx$oprindelse.$t;
+                    klon.querySelector("h2").textContent = menu.gsx$navn.$t;
+                    klon.querySelector("img").src = menu.gsx$billede.$t;
+                    klon.querySelector(".pris").textContent += menu.gsx$pris.$t;
+                    klon.querySelector(".køn").textContent += menu.gsx$køn.$t;
+                    klon.querySelector(".hold").textContent += menu.gsx$hold.$t;
+                    klon.querySelector(".historie").textContent += menu.gsx$historie.$t;
 
-                    klon.querySelector(".ret").addEventListener("click", () => {
-                        visDetalje(ret);
+                    klon.querySelector(".person").addEventListener("click", () => {
+                        visDetalje(person);
 
                     });
 
@@ -182,26 +181,26 @@
 
 
         //funktion der viser person i detalje view
-        //        function visDetalje(person) {
-        //            /*console.log(person);*/
-        //            document.querySelector("#detalje").style.display = "block";
-        //
-        //            document.querySelector("#detalje .luk").addEventListener("click", skjulDetalje);
-        //
-        //            document.querySelector("#detalje h2").textContent = person.gsx$navn.$t;
-        //            document.querySelector("#detalje img").src = person.gsx$billede.$t;
-        //            document.querySelector("#detalje img").alt = Portræt af $ {
-        //                person.gsx$billede.$t
-        //            };
-        //            document.querySelector("#detalje .githubLink").href = https: //github.com/${person.gsx$github.$t};
-        //                document.querySelector("#detalje .githubLink").textContent = github.com / $ {
-        //                    person.gsx$github.$t
-        //                };
-        //        }
-        //
-        //        function skjulDetalje() {
-        //            document.querySelector("#detalje").style.display = "none";
-        //        }
+        function visDetalje(person) {
+            /*console.log(person);*/
+            document.querySelector("#detalje").style.display = "block";
+
+            document.querySelector("#detalje .luk").addEventListener("click", skjulDetalje);
+
+            document.querySelector("#detalje h2").textContent = person.gsx$navn.$t;
+            document.querySelector("#detalje img").src = person.gsx$billede.$t;
+            document.querySelector("#detalje img").alt = Portræt af $ {
+                person.gsx$billede.$t
+            };
+            document.querySelector("#detalje .githubLink").href = https: //github.com/${person.gsx$github.$t};
+                document.querySelector("#detalje .githubLink").textContent = github.com / $ {
+                    person.gsx$github.$t
+                };
+        }
+
+        function skjulDetalje() {
+            document.querySelector("#detalje").style.display = "none";
+        }
     </script>
 </body>
 

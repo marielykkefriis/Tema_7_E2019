@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        img {
+            width: 100%;
+        }
+
+        .person {
+            padding: 20px;
+            border: solid;
+            background-color: papayawhip;
+
+        }
+
+        section {
+            width: 100vw;
+            margin: 1vw auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            grid-gap: 2vw;
+
+        }
+
+        nav {
+            text-align: center;
+        }
+
+        button {
+            margin: .5em;
+            border: 1px solid;
+
+        }
+
+        .valgt {
+            background-color: papayawhip;
+        }
+
+        @media screen and (min-width: 600px) {
+            section {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media screen and (min-width: 1200px) {
+            section {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Personliste</h1>
+    <nav>
+        <button data-kategorier="alle" class="valgt">Alle</button>
+        <button data-kategorier="forretter">Kvinder</button>
+        <button data-kategorier="hovedretter">Mænd</button>
+        <button data-kategorier="andet">Andet</button>
+    </nav>
+    <template>
+        <article class="person">
+            <h2></h2>
+            <img src="" alt="">
+            <a href=""></a>
+        </article>
+    </template>
+    <section id="personliste"></section>
+</body>
+<script>
+    //
+
+
+    document.addEventListener("DOMContentLoaded", start);
+    const jsonurl = "https://spreadsheets.google.com/feeds/list/17Dd7DvkPaFamNUdUKlrFgnH6POvBJXac7qyiS6zNRw0/od6/public/values?alt=json"
+    let personArray = [];
+    let filter = "alle";
+
+
+    //Første funktion der kaldes efter DOM er loaded
+    function start() {
+        const filterKnapper = document.querySelectorAll("button");
+        filterKnapper.forEach(knap => knap.addEventListener("click", filtrerPersoner));
+        hentData();
+    }
+
+    //Funktion der filtrerer personer (json)
+    function filtrerPersoner() {
+        filter = this.dataset.kategorier; //Sæt variabel "filter" til aktuel værdi
+        document.querySelector(".valgt").classList.remove("valgt");
+        this.classList.add("valgt");
+        visData(); //Kald funktionen vis igen med nyt filter
+
+    }
+    //Funktion der henter data fra variablen url
+    async function hentData() {
+        let jsonData = await fetch(jsonurl);
+        personArray = await jsonData.json();
+        visData();
+    }
+
+    //Funktion der viser data i liste view
+    function visData() {
+        const skabelon = document.querySelector("template").content; //Select indhold af html skabelon (article)
+        const listeElm = document.querySelector("#person-liste"); //Container til articler med et element/person
+        personliste.textContent = "";
+        personArray.feed.entry.forEach(element => { //Loop igennem json (personer)
+            if (element.gsx$kategorier.$t == filter || filter == "kategorier") { //Tjek hvilket køn personen har og sammenlign med filter eller vis alle
+                const klon = skabelon.cloneNode(true);
+                console.log(klon);
+
+                const h2 = klon.querySelector("h2");
+                h2.textContent = element.gsx$navn.$t;
+
+                const img = klon.querySelector("img");
+                img.src = element.gsx$billede.$t;
+                img.alt = " Billede af person " + element.navn;
+
+                const link = klon.querySelector("a")
+                link.setAttribute("href", "https://github.com" + element.gsx$github.$t);
+                link.textContent = "Link til gitHub"
+
+                personliste.appendChild(klon);
+            }
+        })
+    };
+</script>
+
+</html>
