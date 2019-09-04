@@ -6,10 +6,23 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
+        body {
+            width: 100vw;
+            margin: 1vw auto;
+            background-color: white;
+        }
+
         .ret {
-            border: 1px solid silver;
+            /*            border: 2px solid silver;*/
             padding: 20px;
             cursor: pointer;
+            background: white;
+
+        }
+
+        .ret:hover {
+            transform: scale(1.05);
+
         }
 
         section {
@@ -18,10 +31,35 @@
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             grid-gap: 1rem;
+
+        }
+
+        h1 {
+            font-family: sans-serif;
+            font-weight: 500;
+            margin-left: 11vw;
+
+        }
+
+        h2 {
+            font-size: 1.6vw;
+            font-family: sans-serif;
+            font-weight: 500;
+        }
+
+        p {
+            font-family: sans-serif;
+            font-weight: 200;
+        }
+
+        article .billede {
+            width: 100%;
         }
 
         article img {
-            width: 100%;
+            width: 50%;
+
+
         }
 
         nav {
@@ -29,8 +67,20 @@
 
         }
 
+        button {
+            font-size: 1vw;
+            margin: 5px;
+
+        }
+
+        button:hover {
+            transform: scale(1.1);
+
+        }
+
         .valgt {
-            background-color: red;
+            background-color: black;
+            color: white;
         }
 
         #detalje {
@@ -39,18 +89,25 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background-color: rgba(255, 255, 0, 0.52);
+            background-color: lightgrey;
             overflow: scroll;
+            text-align: center;
 
+        }
+
+        #detalje h2 {
+            font-size: 2.3vw;
         }
 
         #detalje .luk {
             position: fixed;
-            top: 0;
-            right: 0;
-            font-size: 4rem;
+            top: 20px;
+            right: 10px;
+            font-size: 2rem;
             cursor: pointer;
         }
+
+
 
         #detalje .person {
             width: 60vw;
@@ -59,9 +116,21 @@
             padding: 4rem;
             background: white;
         }
+
+
+        #footer {
+            width: 100vw;
+            height: 10vw;
+            background: black;
+            color: white;
+            text-align: center;
+
+        }
+
+        #footer p {}
     </style>
 </head>
-
+<h1>RESTAURANT BABUSHKA</h1>
 
 <nav>
     <button data-ret="alt" class="valgt">Menu</button>
@@ -74,31 +143,47 @@
 </nav>
 
 
-<body>
-    <section id="menu"></section>
+<section id="menu"></section>
 
-    <!--
-    <section id="detalje">
-        <article class="ret">
-            <button class="luk">×
-            </button>
-            <h2></h2>
-            <img src="" alt="">
-            <p class="lang"></p>
-        </article>
+<section id="detalje">
+    <article class="">
+        <button class="luk">×
+        </button>
+        <h2></h2>
+        <img src="" alt="">
+        <p class="lang"></p>
+        <p class="oprindelse">Oprindelse: </p>
+        <p class="pris">Pris: </p>
+
+    </article>
+</section>
+
+<template>
+    <article class="ret">
+        <h2 class="navn"> </h2>
+        <img class="billede" alt="">
+        <p class="kort"></p>
+        <p class="pris">Pris: </p>
+    </article>
+</template>
+
+<footer>
+    <section id="footer">
+        <div class="kontakt">
+            <p>Adresse: </p>
+            <p>Grønnegade 97</p>
+            <p>1234 København K</p>
+        </div>
+        <div class="åbningstider">
+            <p>Åbningstider:</p>
+            <p>Mandag - fredag 10.30 - 22.00</p>
+            <p>Lørdag 12.00 - 23.00</p>
+        </div>
     </section>
--->
+</footer>
 
+<body>
 
-    <template>
-        <article class="ret">
-            <h2 class="navn"> </h2>
-            <img class="billede" alt="">
-            <p class="lang">Beskrivelse: </p>
-            <p class="pris">Pris: </p>
-            <p class="oprindelse">Oprindelse: </p>
-        </article>
-    </template>
 
     <script>
         document.addEventListener("DOMContentLoaded", start);
@@ -113,12 +198,12 @@
             filterKnapper.forEach(knap => knap.addEventListener("click", filtrer))
             hentJson();
 
-            //            skjulDetalje();
-            //          loadData();
+            skjulDetalje();
+            loadData();
 
         }
 
-        //funktion der filtrerer personer (json)
+        //funktion der filtrerer retter (json)
 
         function filtrer() {
             console.log(this); //tjek at den er blevet gjort klikbar i consollen
@@ -163,12 +248,14 @@
                     // console.log(klon);
 
                     klon.querySelector("h2").textContent = ret.gsx$navn.$t;
-                    klon.querySelector("img").src = ret.gsx$billede.$t;
+
+                    klon.querySelector("img").src = "/imgs/small/" + ret.gsx$billede.$t + "-sm.jpg";
+                    klon.querySelector("img").alt = "Billede af" + ret.gsx$billede.$t;
+
                     //                    klon.querySelector("kategori").textContent += ret.gsx$kategori.$t;
                     klon.querySelector(".pris").textContent += ret.gsx$pris.$t;
-//                    klon.querySelector(".kort").textContent += ret.gsx$kort.$t;
-                    klon.querySelector(".lang").textContent += ret.gsx$lang.$t;
-                    klon.querySelector(".oprindelse").textContent += ret.gsx$oprindelse.$t;
+                    //                    klon.querySelector(".kort").textContent += ret.gsx$kort.$t;
+                    klon.querySelector(".kort").textContent += ret.gsx$kort.$t;
 
                     klon.querySelector(".ret").addEventListener("click", () => {
                         visDetalje(ret);
@@ -180,28 +267,27 @@
             });
         }
 
-
         //funktion der viser person i detalje view
-        //        function visDetalje(person) {
-        //            /*console.log(person);*/
-        //            document.querySelector("#detalje").style.display = "block";
-        //
-        //            document.querySelector("#detalje .luk").addEventListener("click", skjulDetalje);
-        //
-        //            document.querySelector("#detalje h2").textContent = person.gsx$navn.$t;
-        //            document.querySelector("#detalje img").src = person.gsx$billede.$t;
-        //            document.querySelector("#detalje img").alt = Portræt af $ {
-        //                person.gsx$billede.$t
-        //            };
-        //            document.querySelector("#detalje .githubLink").href = https: //github.com/${person.gsx$github.$t};
-        //                document.querySelector("#detalje .githubLink").textContent = github.com / $ {
-        //                    person.gsx$github.$t
-        //                };
-        //        }
-        //
-        //        function skjulDetalje() {
-        //            document.querySelector("#detalje").style.display = "none";
-        //        }
+        function visDetalje(ret) {
+            /*console.log(person);*/
+            document.querySelector("#detalje").style.display = "block";
+
+            document.querySelector("#detalje .luk").addEventListener("click", skjulDetalje);
+
+            document.querySelector("#detalje h2").textContent = ret.gsx$navn.$t;
+
+            document.querySelector("#detalje img").src = "/imgs/large/" + ret.gsx$billede.$t + ".jpg";
+            document.querySelector("#detalje img").alt = `Portræt af ${ret.gsx$billede.$t}`;
+
+            document.querySelector("#detalje .oprindelse").textContent += ret.gsx$oprindelse.$t;
+            document.querySelector("#detalje .lang").textContent += ret.gsx$lang.$t;
+            document.querySelector("#detalje .pris").textContent += ret.gsx$pris.$t;
+
+        };
+
+        function skjulDetalje() {
+            document.querySelector("#detalje").style.display = "none";
+        }
     </script>
 </body>
 
