@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Babushka</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .ret {
+            border: 1px solid silver;
+            padding: 20px;
+            cursor: pointer;
+        }
+
+        .ret:hover {
+            transform: scale(1.05);
+
+        }
+
+        section {
+            width: 80vw;
+            margin: 1vw auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-gap: 1rem;
+        }
+
+        h1 {
+            font-family: sans-serif;
+            font-weight: 500;
+            margin-left: 11vw;
+
+        }
+
+        h2 {
+            font-size: 1.6vw;
+            font-family: sans-serif;
+            font-weight: 500;
+        }
+
+        p {
+            font-family: sans-serif;
+            font-weight: 200;
+        }
+
+        article .billede {
+            width: 100%;
+        }
+
+        article img {
+            width: 50%;
+
+
+        }
+
+        nav {
+            text-align: center;
+
+        }
+
+        button {
+            font-size: 1vw;
+            margin: 5px;
+
+        }
+
+
+        button:hover {
+            transform: scale(1.1);
+
+        }
+
+        .valgt {
+            background-color: black;
+            color: white;
+        }
+    </style>
+</head>
+
+
+
+
+
+<body>
+
+    <h1>RESTAURANT BABUSHKA</h1>
+
+    <nav>
+        <button data-ret="alt" class="valgt">Menu</button>
+        <button data-ret="forretter">Forretter</button>
+        <button data-ret="hovedretter">Hovedretter</button>
+        <button data-ret="desserter">Desserter</button>
+        <button data-ret="drikkevarer">Drikkevarer</button>
+        <button data-ret="sideorders">Side-orders</button>
+
+    </nav>
+
+    <section id="menu"></section>
+
+    <template>
+        <article class="ret">
+            <h2 class="navn"> </h2>
+            <img class="billede" alt="">
+            <p class="kort"></p>
+            <p class="pris">Pris: </p>
+            <p class="oprindelse"></p>
+        </article>
+    </template>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", start);
+        let menu = [];
+        let filter = "alt";
+
+
+        function start() {
+
+            const filterKnapper = document.querySelectorAll("nav button");
+            filterKnapper.forEach(knap => knap.addEventListener("click", filtrer))
+            hentJson();
+        }
+
+
+        function filtrer() {
+            console.log(this);
+
+            filter = this.dataset.ret;
+            console.log(filter);
+
+            document.querySelector(".valgt").classList.remove("valgt");
+            this.classList.add("valgt");
+
+            vis();
+        }
+
+
+        async function hentJson() {
+            const jsonUrl =
+                "https://spreadsheets.google.com/feeds/list/17Dd7DvkPaFamNUdUKlrFgnH6POvBJXac7qyiS6zNRw0/od6/public/values?alt=json&fbclid=IwAR21EGbf3OgAgUlKlZ8RRy8Lg5tvr5pcrWEyu5gxcxE0MfKSUmKWvIdrrzg";
+            const jsonData = await fetch(jsonUrl);
+            console.log(jsonData);
+
+            menu = await jsonData.json();
+            console.log(menu);
+
+            vis();
+        }
+
+
+
+        function vis() {
+
+            const dest = document.querySelector("#menu");
+            const temp = document.querySelector("template").content;
+            dest.textContent = "";
+
+
+            menu.feed.entry.forEach(ret => {
+                if (ret.gsx$kategori.$t == filter || filter == "alt") {
+
+                    const klon = temp.cloneNode(true);
+
+
+                    klon.querySelector("h2").textContent = ret.gsx$navn.$t;
+                    klon.querySelector("img").src = "imgs/small/" + ret.gsx$billede.$t + "-sm.jpg";
+                    klon.querySelector("img").alt = "billedeaf" + ret.gsx$billede.$t;
+                    klon.querySelector(".pris").textContent += ret.gsx$pris.$t + "kr.";
+                    klon.querySelector(".kort").textContent += ret.gsx$kort.$t;
+
+                    dest.appendChild(klon);
+                    dest.lastElementChild.addEventListener("click", () => {
+                        location.href = `babushka2-detaljer.html?ret=${ret.gsx$id.$t}`;
+                    })
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

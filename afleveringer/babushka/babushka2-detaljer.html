@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Detaljeside</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        img {
+            width: 100%;
+        }
+
+        .ret {
+            border: 1px solid;
+            padding: 1em;
+        }
+
+        #detalje {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(105, 105, 105, 0.47);
+            overflow: scroll;
+        }
+
+        #detalje .luk {
+            position: fixed;
+            top: 0;
+            left: 0;
+            font-size: 3rem;
+            cursor: pointer;
+        }
+
+        #detalje .ret {
+            width: 40vw;
+            min-height: 50vh;
+            margin: 4rem auto;
+            padding: 4rem;
+            background: white;
+        }
+
+        p {
+            font-family: monospace;
+            font: 1rem;
+            line-height: 2;
+            color: dimgray;
+            text-align: center;
+
+        }
+
+        h1 {
+            font-family: monospace;
+            font-size: 4rem;
+            color: black;
+            text-transform: uppercase;
+            text-align: center;
+            margin-top: 5rem;
+        }
+
+        h2 {
+            font-family: monospace;
+            font-weight: lighter;
+            font-size: 2rem;
+            text-transform: uppercase;
+            color: black;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <section id="menu"></section>
+
+
+    <section id="detalje">
+        <article class="ret">
+            <button class="luk">⤺</button>
+            <h2></h2>
+            <img src="" alt="">
+            <p class="lang"></p>
+            <p class="pris">Pris: </p>
+            <p class="oprindelse">Oprindelse: </p>
+        </article>
+    </section>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const id = urlParams.get("ret");
+        //console.log(ret);
+
+        let menu;
+        const url = "https://spreadsheets.google.com/feeds/list/17Dd7DvkPaFamNUdUKlrFgnH6POvBJXac7qyiS6zNRw0/od6/public/values?alt=json&fbclid=IwAR21EGbf3OgAgUlKlZ8RRy8Lg5tvr5pcrWEyu5gxcxE0MfKSUmKWvIdrrzg";
+
+        document.addEventListener("DOMContentLoaded", start);
+
+
+        function start() {
+            loadData();
+        }
+
+
+        async function loadData() {
+            const response = await fetch(url);
+            menu = await response.json();
+            vis();
+        }
+
+
+        function vis() {
+
+            menu.feed.entry.forEach(ret => {
+                console.log(ret.gsx$id.$t)
+                if (ret.gsx$id.$t == id) {
+                    console.log(ret)
+                    document.querySelector("#detalje h2").textContent = ret.gsx$navn.$t;
+                    document.querySelector("#detalje img").src = "imgs/large/" + ret.gsx$billede.$t + ".jpg";
+                    document.querySelector("#detalje img").alt = "billedeaf" + ret.gsx$billede.$t;
+                    document.querySelector("#detalje .pris").textContent += ret.gsx$pris.$t + "kr.";
+                    document.querySelector("#detalje .lang").textContent += ret.gsx$lang.$t;
+                    document.querySelector(".oprindelse").textContent += ret.gsx$oprindelse.$t;
+                }
+            })
+        }
+
+        document.querySelector(".luk").addEventListener("click", () => {
+            history.back();
+        });
+    </script>
+</body>
+
+</html>

@@ -6,17 +6,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        body {
-            width: 100vw;
-            margin: 1vw auto;
-            background-color: white;
-        }
-
         .ret {
-            /*            border: 2px solid silver;*/
+            border: 1px solid silver;
             padding: 20px;
             cursor: pointer;
-            background: white;
 
         }
 
@@ -108,16 +101,6 @@
         }
 
 
-
-        #detalje .person {
-            width: 60vw;
-            min-height: 50vh;
-            margin: 4rem auto;
-            padding: 4rem;
-            background: white;
-        }
-
-
         #footer {
             width: 100vw;
             height: 10vw;
@@ -126,63 +109,61 @@
             text-align: center;
 
         }
-
-        #footer p {}
     </style>
 </head>
-<h1>RESTAURANT BABUSHKA</h1>
-
-<nav>
-    <button data-ret="alt" class="valgt">Menu</button>
-    <button data-ret="forretter">Forretter</button>
-    <button data-ret="hovedretter">Hovedretter</button>
-    <button data-ret="desserter">Desserter</button>
-    <button data-ret="drikkevarer">Drikkevarer</button>
-    <button data-ret="sideorders">Side-orders</button>
-
-</nav>
-
-
-<section id="menu"></section>
-
-<section id="detalje">
-    <article class="">
-        <button class="luk">×
-        </button>
-        <h2></h2>
-        <img src="" alt="">
-        <p class="lang"></p>
-        <p class="oprindelse">Oprindelse: </p>
-        <p class="pris">Pris: </p>
-
-    </article>
-</section>
-
-<template>
-    <article class="ret">
-        <h2 class="navn"> </h2>
-        <img class="billede" alt="">
-        <p class="kort"></p>
-        <p class="pris">Pris: </p>
-    </article>
-</template>
-
-<footer>
-    <section id="footer">
-        <div class="kontakt">
-            <p>Adresse: </p>
-            <p>Grønnegade 97</p>
-            <p>1234 København K</p>
-        </div>
-        <div class="åbningstider">
-            <p>Åbningstider:</p>
-            <p>Mandag - fredag 10.30 - 22.00</p>
-            <p>Lørdag 12.00 - 23.00</p>
-        </div>
-    </section>
-</footer>
 
 <body>
+    <h1>RESTAURANT BABUSHKA</h1>
+
+    <nav>
+        <button data-ret="alt" class="valgt">Menu</button>
+        <button data-ret="forretter">Forretter</button>
+        <button data-ret="hovedretter">Hovedretter</button>
+        <button data-ret="desserter">Desserter</button>
+        <button data-ret="drikkevarer">Drikkevarer</button>
+        <button data-ret="sideorders">Side-orders</button>
+
+    </nav>
+
+
+    <section id="menu"></section>
+
+    <section id="detalje">
+        <article class="">
+            <button class="luk">×
+            </button>
+            <h2></h2>
+            <img src="" alt="">
+            <p class="lang"></p>
+            <p class="oprindelse">Oprindelse: </p>
+            <p class="pris">Pris: </p>
+
+        </article>
+    </section>
+
+    <template>
+        <article class="ret">
+            <h2 class="navn"> </h2>
+            <img class="billede" alt="">
+            <p class="kort"></p>
+            <p class="pris">Pris: </p>
+        </article>
+    </template>
+
+    <footer>
+        <section id="footer">
+            <div class="kontakt">
+                <p>Adresse: </p>
+                <p>Grønnegade 97</p>
+                <p>1234 København K</p>
+            </div>
+            <div class="åbningstider">
+                <p>Åbningstider:</p>
+                <p>Mandag - fredag 10.30 - 22.00</p>
+                <p>Lørdag 12.00 - 23.00</p>
+            </div>
+        </section>
+    </footer>
 
 
     <script>
@@ -281,7 +262,7 @@
 
             document.querySelector("#detalje .oprindelse").textContent += ret.gsx$oprindelse.$t;
             document.querySelector("#detalje .lang").textContent += ret.gsx$lang.$t;
-            document.querySelector("#detalje .pris").textContent += ret.gsx$pris.$t;
+            document.querySelector("#detalje .pris").textContent += ret.gsx$pris.$t + "kr.";
 
         };
 
